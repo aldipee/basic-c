@@ -1,5 +1,7 @@
 {
   "files.associations": {
-    "ctype.h": "c"
+    "stdio.h": "c",
+    "time_convertion.h": "c",
+    "stdlib.h": "c"
   }
 }
