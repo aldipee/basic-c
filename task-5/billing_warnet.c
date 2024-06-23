@@ -1,29 +1,9 @@
-
-void printOptions(){
-    puts("Please select an option:");
-    puts("1. Time Conversion");
-    puts("2. Character Combine");
-    puts("3. Exit");
-}
-
-
-// Ansi Output format styling
-// https://gist.github.com/radxene/f1e286301763b921baf06074ea46c800
-#define ANSI_COLOR_GREEN        "\x1b[32m"
-#define ANSI_COLOR_BLUE         "\x1b[34m"
-#define ANSI_STYLE_BOLD         "\x1b[1m"
-#define ANSI_STYLE_ITALIC       "\x1b[3m"
-#define ANSI_STYLE_UNDERLINE    "\x1b[4m"
-#define ANSI_RESET_ALL          "\x1b[0m"
-
-void printSeperator(int length, char seperator){
-    for (int i = 0; i < length; i++)
-    {
-        printf("%c", seperator);
-    }
-    printf("\n");
-}
-
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+#include "custom_utils.h"
 
 
 int getTotalEligbleDisount(float billingDurationInHours){
@@ -96,17 +76,17 @@ char* rupiahFormatter(int number) {
 }
 
 void printWelcomeMessage(){
-    printf("==========================\n");
-    printf("| Selamat Datang di Warnet Point Blank |\n");
-    printf("---------------------------\n");
-    printf("| Bebas internet tanpa khawatir di block Kominfo |\n");
-    printf("| Bocil dilarang berisik |\n");
-    printf("==========================\n");
+    printSeperator(60, '=');
+    printf("| Selamat Datang di Warnet Point Blank \n");
+    printSeperator(60, '-');
+    printf("| Bebas internet tanpa khawatir di block Kominfo \n");
+    printf("| Bocil dilarang berisik \n");
+    printSeperator(60, '=');
     printf("\n");
 }
 
 
-void warnetCashier(){
+void runWarnetBillingSystem(){
     int basedRentPerHour = 10000;
     float rentDurationInHours = 0;
     int rentDurationInMinutes = 0;
@@ -116,8 +96,11 @@ void warnetCashier(){
     printWelcomeMessage();
 
 
-    puts("Enter the time in minutes: ");
+    puts("Enter total duration time in minutes: ");
     scanf("%s", &inputString);
+    printf("\n");
+    printf(ANSI_STYLE_ITALIC "Calculating your bill...\n" ANSI_RESET_ALL);
+    printf("\n");
 
     rentDurationInMinutes = sanitizeInput(inputString);
     rentDurationInHours = rentDurationInMinutes / 60.0;
@@ -132,15 +115,15 @@ void warnetCashier(){
     char *finalBillInRupiah = rupiahFormatter(finalBill);
 
 
-    printSeperator(40);
+    printSeperator(40, '=');
     printf("| %-37s |\n", "Tagihan Billing Inet");
-    printSeperator(40);
+    printSeperator(40, '=');
     printf("| %-20s | %14.1f \n", "Durasi Jam", rentDurationInHours);
     printf("| %-20s | %15s \n", "Total Tagihan", totalBillInRupiah);
     printf("| %-20s | %15s \n", "Total Discount", totalDiscountInRupiah);
     printf("| %-20s | %15s \n", "Total Bayar", finalBillInRupiah);
     printf("| %-20s | %10s \n", "Total CashBon", "Rp. 0");
-    printSeperator(40);
+    printSeperator(40, '=');
     !!applicableDiscountInPercentage &&  printf(ANSI_COLOR_GREEN ANSI_STYLE_BOLD "Selamat! Kamu dapet diskon %d%%\n" ANSI_RESET_ALL, applicableDiscountInPercentage);
     !!applicableDiscountInPercentage &&  printf(ANSI_COLOR_BLUE ANSI_STYLE_BOLD "Sering-sering dateng lagi yeee!!\n" ANSI_RESET_ALL);
 }
