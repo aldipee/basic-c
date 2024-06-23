@@ -6,6 +6,12 @@
 #include "custom_utils.h"
 
 
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+
 void printWelcomeMessageScoring(){
     printf("\n");
     printSeperator(60, '=');
@@ -50,7 +56,9 @@ char* sanitizeStudentNameInput(char *string){
     {
         // Ask the user to enter a valid number
         puts("Invalid name input! Please enter a valid name: ");
-        scanf(" %[^\n]s", string);
+        // scanf(" %[^\n]s", string);
+        fgets(string, 100, stdin);
+        string[strcspn(string, "\n")] = '\0'; 
         isValidName = validateStringOnly(string);
     }
     return string;
@@ -122,15 +130,26 @@ int runStudentScoringSystem(){
 
     // loop to get student names and scores
     printf("Enter student data: \n");
-    int totalStudent = 2;
+    int totalStudent = 10;
 
     for (int i = 0; i < totalStudent; i++)
     {
+        clearInputBuffer();
         printf("%d). Enter student name: ", i+1);
         // it seems like scanf is not able to read string with space, so we need to use this scanf(" %[^\n]s", studentNames[i]);
         // ref: https://stackoverflow.com/questions/6282198/reading-string-from-input-with-space-character
-        scanf(" %[^\n]s", studentNames[i]);
-        strcpy(studentNames[i], sanitizeStudentNameInput(studentNames[i]));
+        /* The line `scanf("%s", studentNames[i]);` is attempting to read a string input from the user
+        and store it in the `studentNames[i]` array. However, there are a couple of issues with this
+        line: */
+        // scanf("%s", studentNames[i]);
+        /// using fgets insetea of scanf, scanf produce bug on macos
+        fgets(studentNames[i], sizeof(studentNames[i]), stdin);
+         // since using fgets, it automatically store the value with \n, so we need to remove it
+        studentNames[i][strcspn(studentNames[i], "\n")] = '\0'; 
+        // we dont need stcpy anymore, since we are using fgets
+        // fgets automatically store the value
+         sanitizeStudentNameInput(studentNames[i]);
+        // strcpy(studentNames[i], sanitizeStudentNameInput(studentNames[i]));
         
         studentQuizScores[i] = sanitizeScoreInput("Quiz Score", studentNames[i], ANSI_COLOR_GREEN);
 

@@ -98,12 +98,14 @@ void runWarnetBillingSystem(){
 
     puts("Enter total duration time in minutes: ");
     scanf("%s", &inputString);
+   
+
+    rentDurationInMinutes = sanitizeInput(inputString);
     printf("\n");
     printf(ANSI_STYLE_ITALIC "Calculating your bill...\n" ANSI_RESET_ALL);
     printf("\n");
-
-    rentDurationInMinutes = sanitizeInput(inputString);
     rentDurationInHours = rentDurationInMinutes / 60.0;
+
     applicableDiscountInPercentage = getTotalEligbleDisount(rentDurationInHours);
     int totalBill = basedRentPerHour * rentDurationInHours;
     int totalDiscount = totalBill * applicableDiscountInPercentage / 100;
